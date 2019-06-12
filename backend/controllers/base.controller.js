@@ -4,7 +4,7 @@ class BaseController {
   find(req, res) {
     const { params } = req;
 
-    res.json({params});
+    res.json({ params });
   }
 
   findById(req, res) {

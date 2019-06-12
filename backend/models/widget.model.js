@@ -27,4 +27,4 @@ const WidgetSchema = mongoose.Schema({
   }
 });
 
-module.exports = connection => connection.model('Widget', WidgetSchema);
+module.exports = mongoose.model('Widget', WidgetSchema);

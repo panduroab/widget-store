@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
-const itemModel = require('./item.model');
+const Schema = mongoose.Schema;
 
 const InventorySchema = mongoose.Schema({
-  item: itemModel,
+  widgetId: { type: Schema.Types.ObjectId, ref: 'Widget' },
   count: {
     type: Number,
     min: 0,
@@ -14,4 +14,4 @@ const InventorySchema = mongoose.Schema({
   }
 });
 
-module.exports = connection => connection.model('Inventory', InventorySchema);
+module.exports = mongoose.model('Inventory', InventorySchema);

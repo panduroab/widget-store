@@ -25,7 +25,11 @@ const ItemSchema = mongoose.Schema({
     min: 0,
     required: true
   },
-  widgetId: { type: Schema.Types.ObjectId, ref: 'Widget' },
+  widgetId: {
+    type: Schema.Types.ObjectId,
+    ref: 'Widget',
+    required: true
+  },
   createdAt: {
     type: Date,
     default: Date.now

@@ -7,7 +7,7 @@ const database = require('./database.js')();
 database.connect();
 
 const app = express();
-
+app.disable('etag');
 app.use(cors());
 app.use(morgan('dev'));
 app.use(express.json());

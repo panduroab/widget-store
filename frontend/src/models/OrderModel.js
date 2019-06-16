@@ -3,7 +3,10 @@ class OrderModel {
     this.httpClient = httpClient;
   }
   find() {
-    return this.httpClient.get('widgets');
+    return this.httpClient.get('orders');
+  }
+  create(params) {
+    return this.httpClient.post('orders', params);
   }
 };
 

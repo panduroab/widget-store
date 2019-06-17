@@ -36,7 +36,7 @@ const cartBrowserReducer = createReducer(cartInitState, {
   },
   REMOVE_CART_ITEM: (state, action) => {
     const { cart_id } = action.payload;
-    const filtered_cart = state.cartList.filter(item => item.cart_id != cart_id);
+    const filtered_cart = state.cartList.filter(item => item.cart_id !== cart_id);
     state.cartList = filtered_cart;
   },
   CLEAR_CART_ITEMS: (state, action) => {
@@ -45,11 +45,27 @@ const cartBrowserReducer = createReducer(cartInitState, {
 });
 
 const orderBrowserReducer = createReducer({
-  selectedOrder: null,
+  selectedOrder: { items: [] },
   ...initialState
 }, {
-    SELECT_ORDER: (state, action) => {
+    /*
+    PAY_ORDER_STARTED
+    PAY_ORDER_SUCCEEDED
+    PAY_ORDER_ERROR
+    */
+    FETCH_ORDER_STARTED: (state, action) => {
+      state.isLoading = true;
+    },
+    FETCH_ORDER_SUCCEEDED: (state, action) => {
+      state.isLoading = false;
       state.selectedOrder = action.payload;
+    },
+    FETCH_ORDER_ERROR: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
+    CLEAR_ORDER_BROWSER: (state, action) => {
+      state.selectedOrder = { items: [] };
     }
   });
 

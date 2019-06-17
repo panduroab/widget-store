@@ -2,8 +2,8 @@ class OrderModel {
   constructor(httpClient) {
     this.httpClient = httpClient;
   }
-  find() {
-    return this.httpClient.get('orders');
+  findById(orderId) {
+    return this.httpClient.get(`orders/${orderId}`);
   }
   create(params) {
     return this.httpClient.post('orders', params);

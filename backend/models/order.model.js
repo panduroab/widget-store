@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+//const Schema = mongoose.Schema;
 
-const ItemSchema = mongoose.Schema({
+/*const ItemSchema = mongoose.Schema({
   colorName: {
     type: String,
     required: true
@@ -38,10 +38,13 @@ const ItemSchema = mongoose.Schema({
     type: Date,
     default: Date.now
   }
-});
+});*/
 
 const OrderSchema = mongoose.Schema({
-  items: [ItemSchema], //you should test queries for subdocuments
+  items: {
+    type: Array,
+    "default": []
+  }, //you should test queries for subdocuments
   //https://coderwall.com/p/6v5rcw/querying-sub-documents-and-sub-sub-documents-in-mongoose
   createdAt: {
     type: Date,

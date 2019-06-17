@@ -33,8 +33,14 @@ const connectedCartBrowser = connect(
   }),
   actionCreators
 )(CartBrowser);
+const connectedOrderBrowser = connect(
+  state => ({
+    orderBrowser: state.orderBrowser
+  }),
+  actionCreators
+)(OrderBrowser);
 
-const store = configureStore({
+export const store = configureStore({
   reducer: rootReducer,
   //immutableStateInvariant, thunk, serializableStateInvariant
   middleware: [...getDefaultMiddleware(), logger]
@@ -54,7 +60,7 @@ function App() {
           <CssBaseline />
           <ConnectedWidgetStoreBar />
           <Route exact path="/" component={connectedWidgetBrowser} />
-          <Route path="/orders/" component={OrderBrowser} />
+          <Route path="/orders/" component={connectedOrderBrowser} />
           <Route path="/cart/" component={connectedCartBrowser} />
         </div>
       </Router>

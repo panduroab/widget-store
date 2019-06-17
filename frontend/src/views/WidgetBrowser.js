@@ -22,12 +22,11 @@ const WidgetView = ({
       display: 'flex',
       flexDirection: 'column'
     }}>
-      <CardMedia
+      <Card
         style={{
-          paddingTop: '56.25%', // 16:9
+          paddingTop: '56.25%',
+          backgroundColor: widget.color
         }}
-        image="https://source.unsplash.com/random"
-        title="Image title"
       />
       <CardContent style={{
         flexGrow: 1
@@ -35,9 +34,12 @@ const WidgetView = ({
         <Typography gutterBottom variant="h5" component="h2">
           {widget.name}
         </Typography>
-        <Typography>
-          <b>{widget.category}</b>
-        </Typography>
+        <div><b>Category: </b>{widget.category}</div>
+        <div><b>Size: </b>{widget.size}</div>
+        <div><b>Color: </b>{widget.color}</div>
+        <div style={{
+          textAlign: 'right'
+        }}>{widget.inventory} Widgets available</div>
       </CardContent>
       <CardActions>
         <Button onClick={() => { addItemToCart(widget) }} size="small" color="primary">
@@ -64,6 +66,25 @@ export default class WidgetBrowser extends React.Component {
 
   render() {
     const { widgetList } = this.props.widgetBrowser;
+    const colors = [
+      'Red',
+      'Green',
+      'Blue',
+      'White',
+      'Silver',
+      'Gray',
+      'Black',
+      'Maroon',
+      'Yellow',
+      'Olive',
+      'Lime',
+      'Aqua',
+      'Teal',
+      'Navy',
+      'Fuchsia',
+      'Purple'
+    ];
+    const categories = ['Prime', 'Elite', 'Extreme Edition'];
     return (
       <Container style={{
         paddingTop: '5px',
@@ -89,15 +110,14 @@ export default class WidgetBrowser extends React.Component {
                 <label>Category:</label>
                 <Field component={NativeSelect} style={{ marginLeft: '0.3em', marginRight: '0.8em', width: '8em' }} name="category">
                   <option value="All">All</option>
-                  <option value="Premium">Premium</option>
-                  <option value="Elite">Elite</option>
+                  {categories.map((category, index) => <option key={index} value={category}>{category}</option>)}
                 </Field>
                 <label>Color:</label>
                 <Field component={NativeSelect} style={{ marginLeft: '0.3em', marginRight: '0.8em', width: '8em' }} name="color">
                   <option value=""></option>
-                  <option value="Red">Red</option>
-                  <option value="Green">Green</option>
-                  <option value="Blue">Blue</option>
+                  {
+                    colors.map((color, index) => <option key={index} value={color}>{color}</option>)
+                  }
                 </Field>
                 <label>Size:</label>
                 <Field component={NativeSelect} style={{ marginLeft: '0.3em', marginRight: '0.8em', width: '8em' }} name="size">

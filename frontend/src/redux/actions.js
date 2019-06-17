@@ -22,6 +22,8 @@ export const removeCartItem = createAction('REMOVE_CART_ITEM');
 export const clearCartItems = createAction('CLEAR_CART_ITEMS');
 
 export const checkoutOrder = createAction('CHECKOUT_ORDER');
+export const cancelOrder = createAction('CANCEL_ORDER');
+export const closeOrderDetails = createAction('CLOSE_ORDER_DETAILS');
 const payOrderStarted = createAction('PAY_ORDER_STARTED');
 const payOrderSucceeded = createAction('PAY_ORDER_SUCCEEDED');
 const payOrderError = createAction('PAY_ORDER_ERROR');

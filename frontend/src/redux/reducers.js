@@ -35,6 +35,9 @@ const widgetBrowserReducer = createReducer({
 const persistedState = loadState() || {};
 const cartInitState = Object.assign({}, {
   cartList: [],
+  showCheckout: false,
+  showOrderDetails: false,
+  completedOrder: null,
   ...initialState
 }, persistedState.cartBrowser || null);
 
@@ -49,6 +52,27 @@ const cartBrowserReducer = createReducer(cartInitState, {
   },
   CLEAR_CART_ITEMS: (state, action) => {
     state.cartList = [];
+  },
+  CHECKOUT_ORDER: (state, action) => {
+    state.showCheckout = true;
+  },
+  CANCEL_ORDER: (state, action) => {
+    state.showCheckout = false;
+  },
+  PAY_ORDER_STARTED: (state, action) => {
+    state.showCheckout = false;
+  },
+  PAY_ORDER_SUCCEEDED: (state, action) => {
+    state.completedOrder = action.payload;
+    state.showOrderDetails = true;
+  },
+  CLOSE_ORDER_DETAILS: (state, action) => {
+    state.completedOrder = null;
+    state.showOrderDetails = false;
+  },
+  PAY_ORDER_ERROR: (state, action) => {
+    state.error = action.payload;
+    state.showError = true;
   }
 });
 
@@ -56,11 +80,6 @@ const orderBrowserReducer = createReducer({
   selectedOrder: { items: [] },
   ...initialState
 }, {
-    /*
-    PAY_ORDER_STARTED
-    PAY_ORDER_SUCCEEDED
-    PAY_ORDER_ERROR
-    */
     FETCH_ORDER_STARTED: (state, action) => {
       state.isLoading = true;
     },

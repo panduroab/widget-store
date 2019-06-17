@@ -6,12 +6,65 @@ import {
   Button,
   Link,
   Paper,
-  Card
+  Card,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  List,
+  ListItem
 } from '@material-ui/core';
+
+const OrderDialog = ({
+  //items,
+  title,
+  subTitle,
+  content,
+  open,
+  handleCancel,
+  handleAgree
+}) => {
+  return (<Dialog
+    open={open}
+    aria-labelledby="alert-dialog-title"
+    aria-describedby="alert-dialog-description"
+  >
+    <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
+    <DialogContent>
+      <DialogContentText>
+        {subTitle}
+      </DialogContentText>
+      <div>
+        {content}
+      </div>
+    </DialogContent>
+    <DialogActions>
+      <Button onClick={() => { handleCancel() }} color="primary">
+        Close
+      </Button>
+      <Button onClick={() => { handleAgree() }} color="primary" autoFocus>
+        Agree
+      </Button>
+    </DialogActions>
+  </Dialog>)
+};
 
 export default class CartBrowser extends React.Component {
   render() {
-    const { removeCartItem, payOrder, cartBrowser: { cartList } } = this.props;
+    const {
+      removeCartItem,
+      payOrder,
+      checkoutOrder,
+      cancelOrder,
+      closeOrderDetails,
+      cartBrowser: {
+        cartList,
+        showCheckout,
+        showOrderDetails,
+        completedOrder
+      }
+    } = this.props;
     const displayItems = (cartList.length > 0) ?
       cartList.map(item =>
         <Paper key={item.cart_id} style={{ padding: '1em', margin: '1em' }}>
@@ -39,11 +92,34 @@ export default class CartBrowser extends React.Component {
         }}
           href="#">Continue shopping</Link>
       </div>
+    const checkoutContent = (cartList) ?
+      <List>
+        {
+          cartList.map((item, i) => <ListItem key={i}>{item.name}, {item.category} {item.color} {item.size}</ListItem>)
+        }
+      </List> : null;
+    const completedOrderContent = (completedOrder) ?
+      <div><h3>Order ID: {completedOrder._id}</h3></div>
+      : null;
     return (
       <Container style={{
         paddingTop: '5px',
         paddingBottom: '5px'
       }} maxWidth="md">
+        <OrderDialog
+          open={showCheckout}
+          title="Order details"
+          subTitle="Please confirm your purchase."
+          content={checkoutContent}
+          handleAgree={payOrder}
+          handleCancel={cancelOrder} />
+        <OrderDialog
+          open={showOrderDetails}
+          title="Order details"
+          subTitle="Your order has been completed successfully! Please save your Order ID."
+          content={completedOrderContent}
+          handleAgree={closeOrderDetails}
+          handleCancel={closeOrderDetails} />
         <h1>My Cart</h1>
         <Grid container spacing={4}>
           <Grid item xs={8} sm={8} md={8}>
@@ -54,7 +130,7 @@ export default class CartBrowser extends React.Component {
               <h3>You have {cartList.length} items in your Cart</h3>
               <Button
                 disabled={cartList.length === 0}
-                onClick={() => { payOrder() }}
+                onClick={() => { checkoutOrder() }}
                 size="large"
                 variant="contained"
                 color="secondary"

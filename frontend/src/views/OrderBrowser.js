@@ -57,7 +57,7 @@ export default class OrderBrowser extends React.Component {
       }} maxWidth="md">
         <h1>My Orders</h1>
         <form onSubmit={this.handleSubmit}>
-          <Input value={this.state.orderId} onChange={this.handleChange} placeholder="Write your Order code" style={{
+          <Input value={this.state.orderId} onChange={this.handleChange} placeholder="Write your Order ID" style={{
             width: '100%'
           }} />
           <div style={{

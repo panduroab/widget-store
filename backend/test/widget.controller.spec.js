@@ -6,6 +6,27 @@ chai.use(chaiHttp);
 const server = require('../server')();
 
 let _widgets = [];
+const colors = [
+  'White',
+  'Silver',
+  'Gray',
+  'Black',
+  'Red',
+  'Maroon',
+  'Yellow',
+  'Olive',
+  'Lime',
+  'Green',
+  'Aqua',
+  'Teal',
+  'Blue',
+  'Navy',
+  'Fuchsia',
+  'Purple'
+];
+const sizes = ['Small', 'Medium', 'Big'];
+const categories = ['Prime', 'Elite', 'Extreme Edition'];
+
 /**
  * Tests all Widget endpoints
  */
@@ -13,11 +34,18 @@ describe('Widget Controller', () => {
 
   it('should CREATE a Widget', done => {
     const random_name = Math.random().toString(36).substr(2, 5);
+    const stock = Math.floor(Math.random() * 30) + 1;
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    const size = sizes[Math.floor(Math.random() * sizes.length)];
+    const category = categories[Math.floor(Math.random() * categories.length)];
     chai.request(server)
       .post('/api/widgets')
       .send({
-        name: `${random_name}-widget`,
-        category: 'Prime'
+        name: `Widget-${random_name}`,
+        category,
+        color,
+        size,
+        stock
       })
       .then(res => {
         return done();

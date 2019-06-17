@@ -2,8 +2,8 @@ class WidgetModel {
   constructor(httpClient) {
     this.httpClient = httpClient;
   }
-  find() {
-    return this.httpClient.get('widgets');
+  find(params) {
+    return this.httpClient.get('widgets', { params });
   }
 };
 

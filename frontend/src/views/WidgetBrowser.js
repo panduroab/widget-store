@@ -9,7 +9,8 @@ import {
   CardContent,
   CardActions,
   Button,
-  NativeSelect
+  NativeSelect,
+  CircularProgress
 } from '@material-ui/core';
 
 const WidgetView = ({
@@ -39,7 +40,7 @@ const WidgetView = ({
         <div><b>Color: </b>{widget.color}</div>
         <div style={{
           textAlign: 'right'
-        }}>{widget.inventory} Widgets available</div>
+        }}>{widget.stock} Widgets available</div>
       </CardContent>
       <CardActions>
         <Button onClick={() => { addItemToCart(widget) }} size="small" color="primary">
@@ -56,15 +57,12 @@ export default class WidgetBrowser extends React.Component {
     super();
     this.state = {
       selectedFilter: {
-        category: 'All',
+        category: '',
         color: '',
         size: ''
       },
+      isFiltered: false
     };
-  }
-
-  findByFilter = (filter) => {
-    console.log("doing search with:", filter);
   }
 
   componentDidMount() {
@@ -72,28 +70,43 @@ export default class WidgetBrowser extends React.Component {
   }
 
   handleChange = (event) => {
-    console.log(event.target.name, event.target.value);
     const { name, value } = event.target;
     const newState = update(this.state, {
       selectedFilter: {
         [name]: { $set: value }
-      }
+      },
+      isFiltered: { $set: true }
     });
     this.setState(newState);
   }
 
   handleSubmit = (event) => {
-    console.log(this.state.selectedFilter);
+    this.props.findWidgets(this.state.selectedFilter);
     event.preventDefault();
+  }
+
+  handleResetFilter = () => {
+    this.setState({
+      selectedFilter: {
+        category: '',
+        color: '',
+        size: ''
+      },
+      isFiltered: false
+    }, () => {
+      this.props.findWidgets(this.state.selectedFilter);
+    });
   }
 
   render() {
     const {
-      widgetList, filterOptions: { category, size, color }
+      widgetList, filterOptions: { category, size, color }, isLoading
     } = this.props.widgetBrowser;
     const {
-      selectedFilter
+      selectedFilter,
+      isFiltered
     } = this.state;
+    const loading = (isLoading) ? <CircularProgress /> : null;
     return (
       <Container style={{
         paddingTop: '5px',
@@ -107,16 +120,17 @@ export default class WidgetBrowser extends React.Component {
           <form onSubmit={this.handleSubmit}>
             <label>Category:</label>
             <NativeSelect
-            onChange={this.handleChange}
+              onChange={this.handleChange}
               value={selectedFilter.category}
               name="category"
               style={{ marginLeft: '0.3em', marginRight: '0.8em', width: '8em' }}
             >
+              <option value=""></option>
               {category.map((val, i) => <option key={i} value={val}>{val}</option>)}
             </NativeSelect>
             <label>Color:</label>
             <NativeSelect
-            onChange={this.handleChange}
+              onChange={this.handleChange}
               value={selectedFilter.color}
               name="color"
               style={{ marginLeft: '0.3em', marginRight: '0.8em', width: '8em' }}
@@ -128,7 +142,7 @@ export default class WidgetBrowser extends React.Component {
             </NativeSelect>
             <label>Size:</label>
             <NativeSelect
-            onChange={this.handleChange}
+              onChange={this.handleChange}
               value={selectedFilter.size}
               name="size" style={{ marginLeft: '0.3em', marginRight: '0.8em', width: '8em' }}
             >
@@ -137,9 +151,10 @@ export default class WidgetBrowser extends React.Component {
                 size.map((val, i) => <option key={i} value={val}>{val}</option>)
               }
             </NativeSelect>
-            <Button type="submit" color="primary" style={{ marginLeft: '0.5em' }}>
+            <Button disabled={!isFiltered} type="submit" color="primary" style={{ marginLeft: '0.5em' }}>
               Search
             </Button>
+            <Button disabled={!isFiltered} onClick={this.handleResetFilter}>Reset filter</Button>
           </form>
         </Container>
         <Grid container spacing={4}>

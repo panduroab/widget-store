@@ -8,7 +8,14 @@ const createWidget = asyncHandler(async (req, res) => {
 });
 
 const findWidgets = asyncHandler(async (req, res) => {
-  const data = await WidgetModel.find();
+  const { query: { category, size, color } } = req;
+  const filter = Object.assign(
+    { stock: { $gt: 0 } },
+    category ? { category } : null,
+    size ? { size } : null,
+    color ? { color } : null
+  );
+  const data = await WidgetModel.find(filter);
   res.json(data);
 });
 

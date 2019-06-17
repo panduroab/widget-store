@@ -14,6 +14,24 @@ const WidgetSchema = mongoose.Schema({
   },
   color: {
     type: String,
+    enum: [
+      'White',
+      'Silver',
+      'Gray',
+      'Black',
+      'Red',
+      'Maroon',
+      'Yellow',
+      'Olive',
+      'Lime',
+      'Green',
+      'Aqua',
+      'Teal',
+      'Blue',
+      'Navy',
+      'Fuchsia',
+      'Purple'
+    ],
     required: true,
   },
   size: {
@@ -25,7 +43,11 @@ const WidgetSchema = mongoose.Schema({
     type: Boolean,
     default: true
   },
-  inventoryId: { type: Schema.Types.ObjectId, ref: 'Inventory' },
+  stock: {
+    type: Number,
+    min: 0,
+    required: true
+  },
   createdAt: {
     type: Date,
     default: Date.now

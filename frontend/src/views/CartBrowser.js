@@ -53,6 +53,7 @@ export default class CartBrowser extends React.Component {
             <Paper style={{ padding: '1em', marginTop: '1em' }}>
               <h3>You have {cartList.length} items in your Cart</h3>
               <Button
+                disabled={cartList.length === 0}
                 onClick={() => { payOrder() }}
                 size="large"
                 variant="contained"

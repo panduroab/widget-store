@@ -1,5 +1,4 @@
 import React from 'react';
-import { Formik, Field } from 'formik';
 import {
   Typography,
   Container,
@@ -7,7 +6,8 @@ import {
   Button,
   Paper,
   Input,
-  Card
+  Card,
+  CircularProgress
 } from '@material-ui/core';
 export default class OrderBrowser extends React.Component {
   constructor() {
@@ -40,10 +40,16 @@ export default class OrderBrowser extends React.Component {
   render() {
     const {
       orderBrowser: {
-        selectedOrder
+        selectedOrder,
+        isLoading
       }
     } = this.props;
     const { items, createdAt } = selectedOrder;
+    const parsedDate = new Date(createdAt).toLocaleString();
+    const loading = (isLoading) ? <CircularProgress /> : null;
+    const dateOrder = (createdAt) ?
+      <label><b>You paid for this order at:</b> {parsedDate}</label>
+      : null;
     return (
       <Container style={{
         paddingTop: '5px',
@@ -67,6 +73,7 @@ export default class OrderBrowser extends React.Component {
           </div>
         </form>
         <Grid item xs={12} sm={12} md={12}>
+          {dateOrder}
           {
             items.map(item =>
               <Paper key={item._id} style={{ padding: '1em', margin: '1em' }}>

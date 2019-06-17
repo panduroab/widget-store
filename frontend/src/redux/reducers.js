@@ -1,13 +1,14 @@
 import { createReducer, combineReducers } from "redux-starter-kit";
+import { loadState } from "../lib/localStorageHandler";
+import uuidv4 from 'uuid/v4';
 
 const initialState = {
   isLoading: false,
   error: null
 };
 
-const browserWidgetsReducer = createReducer({
+const widgetBrowserReducer = createReducer({
   widgetList: [],
-  widgets: [],
   ...initialState
 }, {
     FIND_WIDGETS_STARTED: (state, action) => {
@@ -23,16 +24,27 @@ const browserWidgetsReducer = createReducer({
     }
   });
 
-const browserCartReducer = createReducer({
-  itemList: [],
+const persistedState = loadState() || {};
+const cartInitState = Object.assign({}, {
+  cartList: [],
   ...initialState
-}, {
-    ADD_ITEM: (state, action) => {
-      state.itemList.push(action.payload);
-    }
-  });
+}, persistedState.cartBrowser || null);
 
-const broserOrdersReducer = createReducer({
+const cartBrowserReducer = createReducer(cartInitState, {
+  ADD_ITEM_TO_CART: (state, action) => {
+    state.cartList.push({ cart_id: uuidv4(), ...action.payload });
+  },
+  REMOVE_CART_ITEM: (state, action) => {
+    const { cart_id } = action.payload;
+    const filtered_cart = state.cartList.filter(item => item.cart_id != cart_id);
+    state.cartList = filtered_cart;
+  },
+  CLEAR_CART_ITEMS: (state, action) => {
+    state.cartList = [];
+  }
+});
+
+const orderBrowserReducer = createReducer({
   selectedOrder: null,
   ...initialState
 }, {
@@ -42,8 +54,8 @@ const broserOrdersReducer = createReducer({
   });
 
 const rootReducer = combineReducers({
-  browserWidgets: browserWidgetsReducer,
-  browserCart: browserCartReducer,
-  broserOrders: broserOrdersReducer
+  widgetBrowser: widgetBrowserReducer,
+  cartBrowser: cartBrowserReducer,
+  orderBrowser: orderBrowserReducer
 })
 export default rootReducer;

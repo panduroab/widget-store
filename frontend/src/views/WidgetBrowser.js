@@ -12,6 +12,42 @@ import {
   NativeSelect
 } from '@material-ui/core';
 
+const WidgetView = ({
+  widget,
+  addItemToCart
+}) => {
+  return (<Grid item xs={12} sm={6} md={4}>
+    <Card style={{
+      height: '100%',
+      display: 'flex',
+      flexDirection: 'column'
+    }}>
+      <CardMedia
+        style={{
+          paddingTop: '56.25%', // 16:9
+        }}
+        image="https://source.unsplash.com/random"
+        title="Image title"
+      />
+      <CardContent style={{
+        flexGrow: 1
+      }}>
+        <Typography gutterBottom variant="h5" component="h2">
+          {widget.name}
+        </Typography>
+        <Typography>
+          <b>{widget.category}</b>
+        </Typography>
+      </CardContent>
+      <CardActions>
+        <Button onClick={() => { addItemToCart(widget) }} size="small" color="primary">
+          Add to Cart
+        </Button>
+      </CardActions>
+    </Card>
+  </Grid>);
+};
+
 export default class WidgetBrowser extends React.Component {
 
   constructor() {
@@ -27,7 +63,7 @@ export default class WidgetBrowser extends React.Component {
   }
 
   render() {
-    const { widgetList } = this.props.browserWidgets;
+    const { widgetList } = this.props.widgetBrowser;
     return (
       <Container style={{
         paddingTop: '5px',
@@ -80,36 +116,11 @@ export default class WidgetBrowser extends React.Component {
         </Container>
         <Grid container spacing={4}>
           {widgetList.map(widget => (
-            <Grid item key={widget._id} xs={12} sm={6} md={4}>
-              <Card style={{
-                height: '100%',
-                display: 'flex',
-                flexDirection: 'column'
-              }}>
-                <CardMedia
-                  style={{
-                    paddingTop: '56.25%', // 16:9
-                  }}
-                  image="https://source.unsplash.com/random"
-                  title="Image title"
-                />
-                <CardContent style={{
-                  flexGrow: 1
-                }}>
-                  <Typography gutterBottom variant="h5" component="h2">
-                    {widget.name}
-                  </Typography>
-                  <Typography>
-                    <b>{widget.category}</b>
-                  </Typography>
-                </CardContent>
-                <CardActions>
-                  <Button size="small" color="primary">
-                    Add to Cart
-                  </Button>
-                </CardActions>
-              </Card>
-            </Grid>
+            <WidgetView
+              key={widget._id}
+              widget={widget}
+              addItemToCart={this.props.addItemToCart}
+            />
           ))}
         </Grid>
       </Container>

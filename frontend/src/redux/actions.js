@@ -16,3 +16,7 @@ export const findWidgets = params => async (dispatch) => {
     return dispatch(findWidgetsError(e.message));
   }
 };
+
+export const addItemToCart = createAction('ADD_ITEM_TO_CART');
+export const removeCartItem = createAction('REMOVE_CART_ITEM');
+export const clearCartItems = createAction('CLEAR_CART_ITEMS');

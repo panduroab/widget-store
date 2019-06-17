@@ -8,6 +8,14 @@ const initialState = {
 };
 
 const widgetBrowserReducer = createReducer({
+  filterOptions: {
+    category: ['All', 'Prime', 'Elite', 'Extreme Edition'],
+    size: ['Small', 'Medium', 'Big'],
+    color: [
+      'Red', 'Green', 'Blue', 'White', 'Silver', 'Gray', 'Black', 'Maroon',
+      'Yellow', 'Olive', 'Lime', 'Aqua', 'Teal', 'Navy', 'Fuchsia', 'Purple'
+    ]
+  },
   widgetList: [],
   ...initialState
 }, {

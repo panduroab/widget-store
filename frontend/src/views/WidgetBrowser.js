@@ -1,11 +1,11 @@
 import React from 'react';
-import { Formik, Field } from 'formik';
+import update from 'immutability-helper';
+//import { Formik, Field } from 'formik';
 import {
   Typography,
   Container,
   Grid,
   Card,
-  CardMedia,
   CardContent,
   CardActions,
   Button,
@@ -54,6 +54,13 @@ export default class WidgetBrowser extends React.Component {
 
   constructor() {
     super();
+    this.state = {
+      selectedFilter: {
+        category: 'All',
+        color: '',
+        size: ''
+      },
+    };
   }
 
   findByFilter = (filter) => {
@@ -64,27 +71,29 @@ export default class WidgetBrowser extends React.Component {
     this.props.findWidgets();
   }
 
+  handleChange = (event) => {
+    console.log(event.target.name, event.target.value);
+    const { name, value } = event.target;
+    const newState = update(this.state, {
+      selectedFilter: {
+        [name]: { $set: value }
+      }
+    });
+    this.setState(newState);
+  }
+
+  handleSubmit = (event) => {
+    console.log(this.state.selectedFilter);
+    event.preventDefault();
+  }
+
   render() {
-    const { widgetList } = this.props.widgetBrowser;
-    const colors = [
-      'Red',
-      'Green',
-      'Blue',
-      'White',
-      'Silver',
-      'Gray',
-      'Black',
-      'Maroon',
-      'Yellow',
-      'Olive',
-      'Lime',
-      'Aqua',
-      'Teal',
-      'Navy',
-      'Fuchsia',
-      'Purple'
-    ];
-    const categories = ['Prime', 'Elite', 'Extreme Edition'];
+    const {
+      widgetList, filterOptions: { category, size, color }
+    } = this.props.widgetBrowser;
+    const {
+      selectedFilter
+    } = this.state;
     return (
       <Container style={{
         paddingTop: '5px',
@@ -95,44 +104,43 @@ export default class WidgetBrowser extends React.Component {
           paddingTop: '5px',
           paddingBottom: '5px',
         }}>
-          <Formik
-            initialValues={{
-              category: "All",
-              color: '',
-              size: ''
-            }}
-            onSubmit={(values, action) => {
-              action.setSubmitting(false);
-              this.findByFilter(values);
-            }}
-            render={props => (
-              <form onSubmit={props.handleSubmit}>
-                <label>Category:</label>
-                <Field component={NativeSelect} style={{ marginLeft: '0.3em', marginRight: '0.8em', width: '8em' }} name="category">
-                  <option value="All">All</option>
-                  {categories.map((category, index) => <option key={index} value={category}>{category}</option>)}
-                </Field>
-                <label>Color:</label>
-                <Field component={NativeSelect} style={{ marginLeft: '0.3em', marginRight: '0.8em', width: '8em' }} name="color">
-                  <option value=""></option>
-                  {
-                    colors.map((color, index) => <option key={index} value={color}>{color}</option>)
-                  }
-                </Field>
-                <label>Size:</label>
-                <Field component={NativeSelect} style={{ marginLeft: '0.3em', marginRight: '0.8em', width: '8em' }} name="size">
-                  <option value=""></option>
-                  <option value="Small">Small</option>
-                  <option value="Medium">Medium</option>
-                  <option value="Big">Big</option>
-                </Field>
-                <Button type="submit" color="primary" style={{ marginLeft: '0.5em' }}>
-                  Search
-                </Button>
-              </form>
-            )}
-          />
-
+          <form onSubmit={this.handleSubmit}>
+            <label>Category:</label>
+            <NativeSelect
+            onChange={this.handleChange}
+              value={selectedFilter.category}
+              name="category"
+              style={{ marginLeft: '0.3em', marginRight: '0.8em', width: '8em' }}
+            >
+              {category.map((val, i) => <option key={i} value={val}>{val}</option>)}
+            </NativeSelect>
+            <label>Color:</label>
+            <NativeSelect
+            onChange={this.handleChange}
+              value={selectedFilter.color}
+              name="color"
+              style={{ marginLeft: '0.3em', marginRight: '0.8em', width: '8em' }}
+            >
+              <option value=""></option>
+              {
+                color.map((val, i) => <option key={i} value={val}>{val}</option>)
+              }
+            </NativeSelect>
+            <label>Size:</label>
+            <NativeSelect
+            onChange={this.handleChange}
+              value={selectedFilter.size}
+              name="size" style={{ marginLeft: '0.3em', marginRight: '0.8em', width: '8em' }}
+            >
+              <option value=""></option>
+              {
+                size.map((val, i) => <option key={i} value={val}>{val}</option>)
+              }
+            </NativeSelect>
+            <Button type="submit" color="primary" style={{ marginLeft: '0.5em' }}>
+              Search
+            </Button>
+          </form>
         </Container>
         <Grid container spacing={4}>
           {widgetList.map(widget => (

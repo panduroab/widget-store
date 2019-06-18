@@ -46,6 +46,7 @@ const fetchOrderSucceeded = createAction('FETCH_ORDER_SUCCEEDED');
 const fetchOrderError = createAction('FETCH_ORDER_ERROR');
 export const clearOrderBrowser = createAction('CLEAR_ORDER_BROWSER');
 export const fetchOrderById = orderId => async (dispatch) => {
+  dispatch(clearOrderBrowser());
   dispatch(fetchOrderStarted());
   try {
     const order = await Order.findById(orderId);

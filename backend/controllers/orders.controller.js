@@ -1,9 +1,11 @@
 const OrderModel = require('../models/order.model');
+const widgetController = require('./widgets.controller')();
 const asyncHandler = require('express-async-handler');
 
-const createOrder = asyncHandler(async (req, res) => {
+const createOrder = asyncHandler(async (req, res, next) => {
   const { body } = req;
   const data = await OrderModel.create(body);
+  const updatedWidgets = await widgetController.updateWidgetsStock(data);
   res.json(data);
 });
 

@@ -17,7 +17,6 @@ import {
 } from '@material-ui/core';
 
 const OrderDialog = ({
-  //items,
   title,
   subTitle,
   content,

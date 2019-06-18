@@ -19,7 +19,16 @@ describe('Order Controller', () => {
         chai.request(server)
           .post(`/api/orders`)
           .send({
-            "items": [widgets[0]]
+            "items": [
+              widgets[0],
+              widgets[0],
+              widgets[0],
+              widgets[0],
+              widgets[1],
+              widgets[2],
+              widgets[2],
+              widgets[2]
+            ]
           })
           .then(res => {
             order = res.body;

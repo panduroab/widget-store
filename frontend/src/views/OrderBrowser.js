@@ -6,8 +6,7 @@ import {
   Button,
   Paper,
   Input,
-  Card,
-  CircularProgress
+  Card
 } from '@material-ui/core';
 export default class OrderBrowser extends React.Component {
   constructor() {
@@ -40,13 +39,11 @@ export default class OrderBrowser extends React.Component {
   render() {
     const {
       orderBrowser: {
-        selectedOrder,
-        isLoading
+        selectedOrder
       }
     } = this.props;
     const { items, createdAt } = selectedOrder;
     const parsedDate = new Date(createdAt).toLocaleString();
-    const loading = (isLoading) ? <CircularProgress /> : null;
     const dateOrder = (createdAt) ?
       <label><b>You paid for this order at:</b> {parsedDate}</label>
       : null;
@@ -75,8 +72,8 @@ export default class OrderBrowser extends React.Component {
         <Grid item xs={12} sm={12} md={12}>
           {dateOrder}
           {
-            items.map(item =>
-              <Paper key={item._id} style={{ padding: '1em', margin: '1em' }}>
+            items.map((item, i) =>
+              <Paper key={i} style={{ padding: '1em', margin: '1em' }}>
                 <Card style={{
                   paddingTop: '10%',
                   backgroundColor: item.color

@@ -1,6 +1,5 @@
 import React from 'react';
 import update from 'immutability-helper';
-//import { Formik, Field } from 'formik';
 import {
   Typography,
   Container,
@@ -9,8 +8,7 @@ import {
   CardContent,
   CardActions,
   Button,
-  NativeSelect,
-  CircularProgress
+  NativeSelect
 } from '@material-ui/core';
 
 const WidgetView = ({
@@ -100,13 +98,12 @@ export default class WidgetBrowser extends React.Component {
 
   render() {
     const {
-      widgetList, filterOptions: { category, size, color }, isLoading
+      widgetList, filterOptions: { category, size, color }
     } = this.props.widgetBrowser;
     const {
       selectedFilter,
       isFiltered
     } = this.state;
-    const loading = (isLoading) ? <CircularProgress /> : null;
     return (
       <Container style={{
         paddingTop: '5px',

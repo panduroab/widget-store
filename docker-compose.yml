@@ -1,0 +1,58 @@
+# ------------------------------------------------------------------------------- #
+# IMPORTANT: In a real world project I would not commit the environmet varialbles #
+# ------------------------------------------------------------------------------- #
+version: "3"
+services:
+  frontend:
+    build:
+      context: ./frontend
+    restart: always
+    depends_on:
+      - backend
+    ports:
+      - 8080:80
+
+  backend:
+    build:
+      context: ./backend
+    restart: always
+    environment:
+      SERVER_HOST: 'localhost'
+      SERVER_PORT: '3001'
+      CLIENT_HOST: 'frontend'
+      DB_HOST: 'mongo'
+      DB_PORT: '27017'
+      DB_USER: 'widget_db_admin'
+      DB_PASS: '*53cur3!P455w0rd*'
+      DB_NAME: 'widget_db'
+    depends_on:
+      - mongo
+    ports:
+      - 8888:3001
+
+  mongo:
+    image: mongo
+    restart: always
+    volumes:
+      - ./db_data:/data/db
+      - ./mongo-init:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: M0ng0**Ro0tp455
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: M0ng0**Ro0tp455
+    depends_on:
+      - mongo
+
+volumes:
+  db_data:
+  mongo-init.js:

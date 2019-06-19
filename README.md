@@ -26,3 +26,27 @@ You can create **orders** and make **purchases** without authentication.
 ## Back End
 1. Create a datastore that allows for the storing of inventory and orders
 2. Implement an API that supports the frontend
+
+# Installation
+
+You can setup and install the whole project services (backend, frontend and database) by running one docker-compose command.
+
+## Requeriments
+
+Install `docker` and `docker-compose` in your machine.
+- [Install Docker Desktop for Mac](https://docs.docker.com/docker-for-mac/install/)
+- [Install Docker Compose](https://docs.docker.com/compose/install/)
+
+## Proccess
+1. Clone the project in your local machine.
+    ```
+    $ git clone git@github.com:panduroab/widget-store.git
+    $ cd widget-store
+    ```
+2. Be sure that you have the ports `8080`, `8888`, `27017` and `8081` availables in your machine. Also you can modify this ports in the `docker-compose.yml` file.
+
+    Run docker-compose. This command will install the docker images and build the containers.
+    ```
+    $ docker-compose up -d && docker-compose logs -f
+    ```
+3. When the installation and build process is completed go to your browser at [http://localhost:8080](http://localhost:8080). You should see the widgets in the store.

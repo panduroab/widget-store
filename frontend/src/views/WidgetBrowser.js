@@ -13,7 +13,8 @@ import {
 
 const WidgetView = ({
   widget,
-  addItemToCart
+  addItemToCart,
+  decreaseWidgetStock
 }) => {
   return (<Grid item xs={12} sm={6} md={4}>
     <Card style={{
@@ -41,7 +42,10 @@ const WidgetView = ({
         }}>{widget.stock} Widgets available</div>
       </CardContent>
       <CardActions>
-        <Button onClick={() => { addItemToCart(widget) }} size="small" color="primary">
+        <Button disabled={widget.stock === 0} onClick={() => {
+          addItemToCart(widget);
+          decreaseWidgetStock(widget);
+        }} size="small" color="primary">
           Add to Cart
         </Button>
       </CardActions>
@@ -160,6 +164,7 @@ export default class WidgetBrowser extends React.Component {
               key={widget._id}
               widget={widget}
               addItemToCart={this.props.addItemToCart}
+              decreaseWidgetStock={this.props.decreaseWidgetStock}
             />
           ))}
         </Grid>

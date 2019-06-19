@@ -61,7 +61,8 @@ export default class CartBrowser extends React.Component {
         cartList,
         showCheckout,
         showOrderDetails,
-        completedOrder
+        completedOrder,
+        error
       }
     } = this.props;
     const displayItems = (cartList.length > 0) ?
@@ -100,6 +101,9 @@ export default class CartBrowser extends React.Component {
     const completedOrderContent = (completedOrder) ?
       <div><h3>Order ID: {completedOrder._id}</h3></div>
       : null;
+    const subTitle = (error !== null) ?
+    `${error}. It was not possible to complete your order, please try again.`:
+    "Your order has been completed successfully! Please save your Order ID."
     return (
       <Container style={{
         paddingTop: '5px',
@@ -115,7 +119,7 @@ export default class CartBrowser extends React.Component {
         <OrderDialog
           open={showOrderDetails}
           title="Order details"
-          subTitle="Your order has been completed successfully! Please save your Order ID."
+          subTitle={subTitle}
           content={completedOrderContent}
           handleAgree={closeOrderDetails}
           handleCancel={closeOrderDetails} />

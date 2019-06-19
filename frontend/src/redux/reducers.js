@@ -19,6 +19,16 @@ const widgetBrowserReducer = createReducer({
   widgetList: [],
   ...initialState
 }, {
+    DECREASE_WIDGET_STOCK: (state, action) => {
+      state.widgetList = state.widgetList
+        .map(widget => {
+          if (widget._id === action.payload._id) {
+            const new_stock = widget.stock - 1;
+            return { ...widget, stock: new_stock };
+          }
+          return widget;
+        });
+    },
     FIND_WIDGETS_STARTED: (state, action) => {
       state.isLoading = true;
     },
@@ -69,10 +79,12 @@ const cartBrowserReducer = createReducer(cartInitState, {
   CLOSE_ORDER_DETAILS: (state, action) => {
     state.completedOrder = null;
     state.showOrderDetails = false;
+    state.error = null;
   },
   PAY_ORDER_ERROR: (state, action) => {
     state.error = action.payload;
-    state.showError = true;
+    state.completedOrder = null;
+    state.showOrderDetails = true;
   }
 });
 

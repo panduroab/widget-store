@@ -1,6 +1,25 @@
 const OrderModel = require('../models/order.model');
 const widgetController = require('./widgets.controller')();
 const asyncHandler = require('express-async-handler');
+const groupBy = require('lodash/groupBy');
+const Promise = require("bluebird");
+
+
+const checkoutOrder = asyncHandler(async (req, res, next) => {
+  const { body: { items } } = req;
+  const widgetsGrouped = groupBy(items, item => item._id);
+  //Validate each item
+  const mapResult = await Promise.map(Object.keys(widgetsGrouped), async _id => {
+    const amount = widgetsGrouped[_id].length;
+    const isValid = await widgetController.validateWidgetStock(_id, amount);
+    //if there is not enough widgets in stock return error
+    if (!isValid) {
+      return next(new Error("Can't complete the order"));
+    }
+    return isValid;
+  });
+  return next();
+});
 
 const createOrder = asyncHandler(async (req, res, next) => {
   const { body } = req;
@@ -23,5 +42,6 @@ const findOrderById = asyncHandler(async (req, res) => {
 module.exports = () => ({
   create: createOrder,
   find: findOrders,
-  findById: findOrderById
+  findById: findOrderById,
+  checkoutOrder: checkoutOrder
 });

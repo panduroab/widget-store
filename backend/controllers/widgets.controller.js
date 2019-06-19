@@ -27,6 +27,11 @@ const findWidgetById = asyncHandler(async (req, res) => {
   res.json(data);
 });
 
+const validateWidgetStock = async (widgetId, amount) => {
+  const res = await WidgetModel.findOne({ _id: widgetId, stock: { $gte: amount } });
+  return res;
+};
+
 const updateWidgetsStock = async (new_order) => {
   const { items } = new_order;
   const widgetsGrouped = groupBy(items, item => item._id);
@@ -47,5 +52,6 @@ module.exports = () => ({
   create: createWidget,
   find: findWidgets,
   findById: findWidgetById,
-  updateWidgetsStock: updateWidgetsStock
+  updateWidgetsStock: updateWidgetsStock,
+  validateWidgetStock: validateWidgetStock
 });

@@ -85,6 +85,7 @@ const cartBrowserReducer = createReducer(cartInitState, {
     state.error = action.payload;
     state.completedOrder = null;
     state.showOrderDetails = true;
+    state.cartList = [];
   }
 });
 

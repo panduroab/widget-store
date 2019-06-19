@@ -12,7 +12,7 @@ router.get('/widgets', widgetsController.find);
 router.get('/widgets/:widget_id', widgetsController.findById);
 
 router.get('/orders', ordersController.find);
-router.post('/orders', ordersController.create);
+router.post('/orders', ordersController.checkoutOrder, ordersController.create);
 router.get('/orders/:order_id', ordersController.findById);
 
 module.exports = () => router;
